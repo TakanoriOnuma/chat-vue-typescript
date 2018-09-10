@@ -1,7 +1,8 @@
 <template lang="pug">
 #app
   ChatList(
-    :chatList="$data.chatList"
+    :chatList="$data.chatList",
+    @deleteChat="onDeleteChat"
   )
   ChatForm(
     @submitChat="onSubmitChat"
@@ -13,6 +14,21 @@ import { Component, Vue } from 'vue-property-decorator';
 import ChatList from '@/components/ChatList.vue';
 import ChatForm from '@/components/ChatForm.vue';
 
+import firebase from 'firebase';
+import 'firebase/database';
+
+const app = firebase.initializeApp({
+  apiKey: 'AIzaSyAuxlZjh1j6vnRztVllgkIG-yzpBJTGTDI',
+  authDomain: 'testfirebase-21274.firebaseapp.com',
+  databaseURL: 'https://testfirebase-21274.firebaseio.com',
+  projectId: 'testfirebase-21274',
+  storageBucket: 'testfirebase-21274.appspot.com',
+  messagingSenderId: '220668028836'
+});
+
+const db = firebase.database();
+const chatRef = db.ref('/test/chat/all');
+
 @Component({
   components: {
     ChatList,
@@ -20,7 +36,21 @@ import ChatForm from '@/components/ChatForm.vue';
   },
 })
 export default class App extends Vue {
-  chatList = [{ name: 'name', message: 'テスト' }];
+  chatList = {};
+
+  created() {
+    chatRef.on('value', (snapshot: any) => {
+      this.$data.chatList = snapshot.val();
+    });
+  }
+
+  /**
+   * チャットの削除
+   * @param key - chatのキー
+   */
+  onDeleteChat(key: string) {
+    chatRef.child(key).remove();
+  }
 
   /**
    * Chat送信のコールバック
@@ -28,9 +58,10 @@ export default class App extends Vue {
    * @param text - テキスト
    */
   onSubmitChat(name: string, message: string) {
-    this.$data.chatList.push({
+    chatRef.push({
       name,
-      message
+      message,
+      created: firebase.database.ServerValue.TIMESTAMP
     });
   }
 }
