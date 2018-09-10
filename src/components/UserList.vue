@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  p user list
+  p.title user list
   ul.list
     template(v-for="key in Object.keys($props.userList)")
       li.item(:key="key") {{ $props.userList[key].name || 'ユーザ' }}
@@ -16,6 +16,10 @@ export default class UserList extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.title {
+  border-bottom: solid 2px #00c;
+}
+
 .item {
   display: inline-block;
 
