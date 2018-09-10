@@ -1,29 +1,44 @@
-<template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
+<template lang="pug">
+#app
+  ChatList(
+    :chatList="$data.chatList"
+  )
+  ChatForm(
+    @submitChat="onSubmitChat"
+  )
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from './components/HelloWorld.vue';
+import ChatList from '@/components/ChatList.vue';
+import ChatForm from '@/components/ChatForm.vue';
 
 @Component({
   components: {
-    HelloWorld,
+    ChatList,
+    ChatForm,
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  chatList = [{ name: 'name', message: 'テスト' }];
+
+  /**
+   * Chat送信のコールバック
+   * @param name - 名前
+   * @param text - テキスト
+   */
+  onSubmitChat(name: string, message: string) {
+    this.$data.chatList.push({
+      name,
+      message
+    });
+  }
+}
 </script>
 
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+ul, li {
+  margin: 0;
+  padding: 0;
 }
 </style>

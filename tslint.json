@@ -14,6 +14,10 @@
     "interface-name": false,
     "ordered-imports": false,
     "object-literal-sort-keys": false,
-    "no-consecutive-blank-lines": false
+    "no-consecutive-blank-lines": false,
+    // public・protected・private をメンバ (変数・メソッド) に付与することを強制しない (false)
+    "member-access": false,
+    // 空のブロックを許容する
+    "no-empty": false
   }
 }
