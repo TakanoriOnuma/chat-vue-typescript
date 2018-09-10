@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   form(@submit="onSubmit")
-    input(type="text", placeholder="名前", v-model="$data.name")
+    input(type="text", placeholder="名前", :value="$props.userName", @input="onInput")
     br
     input(type="text", placeholder="メッセージ", v-model="$data.message")
     br
@@ -9,24 +9,31 @@ div
 </template>
 
 <script lang="ts">
-import { Component, Emit, Vue } from 'vue-property-decorator';
+import { Component, Prop, Emit, Vue } from 'vue-property-decorator';
 
 @Component
 export default class ChatForm extends Vue {
-  private name: string = '';
+  @Prop() private userName: string = '';
   private message: string = '';
 
   @Emit('submitChat')
   submitSendChat(name: string, message: string) {}
+
+  @Emit('changeName')
+  emitChangeName(name: string) {}
 
   get _canSubmittion() {
     const { name, message } = this.$data;
     return name !== '' && message !== '';
   }
 
+  onInput(e: any) {
+    this.emitChangeName(e.target.value);
+  }
+
   onSubmit(e: any) {
     e.preventDefault();
-    this.submitSendChat(this.$data.name, this.$data.message);
+    this.submitSendChat(this.$props.userName, this.$data.message);
     this.$data.message = '';
   }
 }

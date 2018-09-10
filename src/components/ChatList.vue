@@ -25,7 +25,7 @@ export default class ChatForm extends Vue {
 
 <style lang="scss" scoped>
 .list {
-  height: calc(100vh - 200px);
+  height: calc(100vh - 300px);
   border: solid 1px #ccc;
   overflow-y: scroll;
 }
